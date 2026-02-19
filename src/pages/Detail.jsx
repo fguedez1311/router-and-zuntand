@@ -1,15 +1,67 @@
-import { useParams } from "react-router";
+import { useState,useEffect } from "react";
+import { useParams,useNavigate } from "react-router";
+import styles from "./Detail.module.css"
 
-export default function JobDetail() {
-  const { id } = useParams();
+export  function JobDetail() {
+
+  const { jobId } = useParams()
+   const navigate = useNavigate()
+
+  const [job,setJob]=useState(null)
+  const [loading,setLoading]=useState(false)
+  const [error,setError]=useState(null)
+  useEffect(()=>{
+      fetch(`https://jscamp-api.vercel.app/api/jobs/${jobId}`)
+      .then(response=>{
+          if (!response.ok) throw new Error('job Not found')
+          return response.json()
+      })
+      .then(json=>{
+        setJob(json)
+       
+      })
+      .catch(err=>{
+        setError(err.message)
+      })
+      .finally(()=>{
+          setLoading(false)
+      })
+  },[jobId])
+
+  if (loading){
+    return 
+        <div style={{ maxWidth:'1280px',margin:'0 auto',padding:'0 1rem' }}>
+          <div className="styles.loading">
+              <p className="styles.loadingText">Cargando...</p>
+          </div>
+
+        </div>
+    
+  }
+  if (error || !job){
+    return(
+         <div style={{ maxWidth:'1289px',margin:'0 auto',padding:'0 1rem' }}>
+          <div className={styles.error}>
+            <h2 className={styles.errorTitle}>Oferta No encontrada</h2>
+            <button
+              onClick={() => navigate('/')}
+              className="boton-azul"
+            >
+              Volver al inicio
+            </button>
+             
+          </div>
+
+        </div>
+    )
+  }
   return (
     <>
       <main>
         <section className="detalleOferta">
           <header className="detalleOferta__header contenedor">
             <h2 className="detalleOferta__h2">
-              <span className="detalleOferta__span">Empleos</span> / Ingeniero de
-              Software Senior
+              <span className="detalleOferta__span">Empleos</span> / {job.titulo}
             </h2>
             <div className="detalleOferta__div">
               <div className="detalleOferta__div--texto">
