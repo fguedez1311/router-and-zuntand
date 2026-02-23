@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { Link } from "../components/Link"
+
 import { useParams, useNavigate } from "react-router";
 import snarkdown from 'snarkdown'
 import styles from "./Detail.module.css";
@@ -45,10 +47,19 @@ import styles from "./Detail.module.css";
         </header>
 
         <DetailApplyButton />
-        <DetailFavoriteButton jobId={job.id} />
+       
       </>
     );
   }
+  function DetailApplyButton () {
+  
+
+  return (
+    <button className={`${styles.applyButton} boton-azul`} >
+      Aplicar Ahora
+    </button>
+  )
+}
 
 export function JobDetail() {
   const { jobId } = useParams();
@@ -56,7 +67,7 @@ export function JobDetail() {
   const navigate = useNavigate();
 
   const [job, setJob] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
     fetch(`https://jscamp-api.vercel.app/api/jobs/${jobId}`)
