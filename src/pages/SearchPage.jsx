@@ -22,9 +22,10 @@ const useFilters=()=>{
       return params.get('text') || ''
   })
   const [currentPage,setCurrentPage]=useState(()=>{
-      const params=new URLSearchParams(window.location.search)
-      const page=Number(params.get('page'))
-      return Number.isNaN(page) ? page : 1
+      const params=new URLSearchParams(window.location.search);
+      const page = Number(params.get('page'));
+      // if the query param is not a valid number default to 1
+      return Number.isNaN(page) ? 1 : page;
   })
    // Estado para los empleos (inicialmente vacío)
   const [jobs, setJobs] = useState([])
@@ -71,6 +72,7 @@ const useFilters=()=>{
       if (filters.location) params.append('type',filters.location)
       if (filters.experienceLevel) params.append('level',filters.experienceLevel)
       if (currentPage>1) params.append('page',currentPage)
+      
       
       const newUrl=params.toString()
                    ? `${window.location.pathname}?${params.toString()}`
