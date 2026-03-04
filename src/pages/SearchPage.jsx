@@ -21,12 +21,14 @@ const useFilters=()=>{
       const params=new URLSearchParams(window.location.search)
       return params.get('text') || ''
   })
-  const [currentPage,setCurrentPage]=useState(()=>{
+    const [currentPage,setCurrentPage]=useState(()=>{
       const params=new URLSearchParams(window.location.search);
-      const page = Number(params.get('page'));
-      // if the query param is not a valid number default to 1
-      return Number.isNaN(page) ? 1 : page;
-  })
+      const pageParam = params.get('page');
+      const page = Number(pageParam);
+      // Si no hay param, o no es número válido, o es menor que 1, usar 1
+      if (!pageParam || Number.isNaN(page) || page < 1) return 1;
+      return page;
+    })
    // Estado para los empleos (inicialmente vacío)
   const [jobs, setJobs] = useState([])
 
