@@ -7,6 +7,7 @@ const useSearchForm = ({idTechnology,idLocation,idExperienceLevel,idText,onSearc
   const timeoutId=useRef(null)
   const[searchText,setSearchText]=useState("")
 
+  
   const handleSubmit = (event) => {
 
     event.preventDefault();
