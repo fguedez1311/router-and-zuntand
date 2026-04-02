@@ -1,64 +1,72 @@
-import { useState,useId,useRef } from "react";
+import { useState, useId, useRef } from "react";
 
 
 
 
-const useSearchForm = ({idTechnology,idLocation,idExperienceLevel,idText,onSearch,onTextFilter}) => {
-  const timeoutId=useRef(null)
-  const[searchText,setSearchText]=useState("")
 
-  
-  const handleSubmit = (event) => {
-
-    event.preventDefault();
-
-    const formData = new FormData(event.currentTarget);
-
-    if(event.target.name===idText){
-      return
-    }
-
-    const filters = {
-      technology: formData.get(idTechnology),
-      location: formData.get(idLocation),
-      experienceLevel: formData.get(idExperienceLevel),
-    };
-
-    onSearch(filters);
-  };
-  const handleTextChange = (event) => {
-    
-    const text = event.target.value;
-    setSearchText(text) //Actualizamos el input inmediatamente
-    //DEBOUNCE: Cancelar el timeout anterior
-    if (timeoutId.current){
-      clearTimeout(timeoutId.current)
-    }
-    timeoutId.current=setTimeout(()=>{
-      onTextFilter(text);
-    },700)
-  };
-  return {
-    searchText,
-    handleSubmit,
-    handleTextChange
-  }
-};
-
-export function SearchFormSection({ onSearch, onTextFilter,initialText}) {
+export function SearchFormSection({
+  onSearch,
+  onTextFilter,
+  initialText = "",
+  initialFilters = {},
+}) {
   const idText = useId();
   const idTechnology = useId();
   const idLocation = useId();
   const idExperienceLevel = useId();
-  const inputRef=useRef()
-  // Estado para saber qué campo está activo
+  const [searchText, setSearchText] = useState(initialText);
+  const [technology, setTechnology] = useState(initialFilters.technology || "");
+  const [location, setLocation] = useState(initialFilters.location || "");
+  const [experienceLevel, setExperienceLevel] = useState(
+    initialFilters.experienceLevel || "",
+  );
   const [focusedField, setFocusedField] = useState(null);
-  const {handleSubmit,handleTextChange}= useSearchForm({idTechnology,idLocation,idExperienceLevel,idText,onSearch,onTextFilter})
-  const handleClearSubmit=(event)=>{
-  event.preventDefault()
-  inputRef.current.value=""
-  onTextFilter("")
-}
+  const timeoutId = useRef(null);
+
+  const handleTextChange = (event) => {
+    const text = event.target.value;
+    setSearchText(text);
+
+    if (timeoutId.current) {
+      clearTimeout(timeoutId.current);
+    }
+
+    timeoutId.current = setTimeout(() => {
+      onTextFilter(text);
+    }, 700);
+  };
+
+  const handleFilterChange = (event) => {
+    const { name, value } = event.target;
+    const nextFilters = {
+      technology,
+      location,
+      experienceLevel,
+    };
+
+    if (name === idTechnology) {
+      nextFilters.technology = value;
+      setTechnology(value);
+    }
+
+    if (name === idLocation) {
+      nextFilters.location = value;
+      setLocation(value);
+    }
+
+    if (name === idExperienceLevel) {
+      nextFilters.experienceLevel = value;
+      setExperienceLevel(value);
+    }
+
+    onSearch(nextFilters);
+  };
+
+  const handleClearSubmit = (event) => {
+    event.preventDefault();
+    setSearchText("");
+    onTextFilter("");
+  };
 
   return (
     <>
@@ -72,7 +80,7 @@ export function SearchFormSection({ onSearch, onTextFilter,initialText}) {
           className="form-busqueda form-busqueda--avanzada"
           id="empleos-search-form"
           role="search"
-          onChange={handleSubmit}
+          onSubmit={(event) => event.preventDefault()}
         >
           <div className="form-busqueda__div form-busqueda__div--principal">
             <svg
@@ -94,7 +102,6 @@ export function SearchFormSection({ onSearch, onTextFilter,initialText}) {
 
             <input
               className="form-busqueda__input"
-              ref={inputRef}
               name={idText}
               id="empleos-search-input"
               type="text"
@@ -107,13 +114,20 @@ export function SearchFormSection({ onSearch, onTextFilter,initialText}) {
                 outline:
                   focusedField === "search" ? "2px solid #4f46e5" : "none",
               }}
-              defaultValue={initialText}
+              value={searchText}
             />
-            <button className="boton-azul" onClick={handleClearSubmit}>X</button>
+            <button className="boton-azul" type="button" onClick={handleClearSubmit}>
+              X
+            </button>
           </div>
 
           <div className="formulario-busqueda__filtros">
-            <select name={idTechnology} id="filter-technology" defaultValue="">
+            <select
+              name={idTechnology}
+              id="filter-technology"
+              value={technology}
+              onChange={handleFilterChange}
+            >
               <option value="">Tecnología</option>
               <optgroup label="Tecnologías populares">
                 <option value="javascript">JavaScript</option>
@@ -131,7 +145,12 @@ export function SearchFormSection({ onSearch, onTextFilter,initialText}) {
               <option value="php">PHP</option>
             </select>
 
-            <select name={idLocation} id="filter-location" defaultValue="">
+            <select
+              name={idLocation}
+              id="filter-location"
+              value={location}
+              onChange={handleFilterChange}
+            >
               <option value="">Ubicación</option>
               <option value="remoto">Remoto</option>
               <option value="cdmx">Ciudad de México</option>
@@ -143,7 +162,8 @@ export function SearchFormSection({ onSearch, onTextFilter,initialText}) {
             <select
               name={idExperienceLevel}
               id="filter-experience-level"
-              defaultValue=""
+              value={experienceLevel}
+              onChange={handleFilterChange}
             >
               <option value="">Nivel de experiencia</option>
               <option value="junior">Junior</option>
