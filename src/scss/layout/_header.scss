@@ -59,6 +59,14 @@
                 outline: none;
           }
     } 
+    .nav-link-active {
+        color: yellow;
+        pointer-events: none; /* Desactiva el clic */
+        opacity: 0.6; /* Se ve un poco más apagado */
+        user-select: none;
+        font-weight: 600;
+        border-bottom: 2px solid currentColor;
+    } 
     &__a--header{
         padding: 1rem 1rem;
         border-radius: 0.5rem;

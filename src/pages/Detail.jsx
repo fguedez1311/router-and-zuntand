@@ -61,7 +61,7 @@ import styles from "./Detail.module.css";
   )
 }
 
-export function JobDetail() {
+export default function JobDetail() {
   const { jobId } = useParams();
   console.log(jobId)
   const navigate = useNavigate();
