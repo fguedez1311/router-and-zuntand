@@ -1,4 +1,4 @@
-import {lazy,Suspense} from 'react'
+import {lazy,Suspense, useState} from 'react'
 import { Routes,Route } from "react-router";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
@@ -15,6 +15,13 @@ const JobDetail=lazy(()=>import('./pages/Detail.jsx'))
 
 function App() {
   
+  const [isLoggedIn,setIsLoggedIn]=useState(false)
+  const handleLogin=()=>{
+    setIsLoggedIn(true)
+  }
+  const handleLogout=()=>{
+    setIsLoggedIn(false)
+  }
   
   return (
     <>
