@@ -25,12 +25,12 @@ function App() {
   
   return (
     <>
-      <Header />
+      <Header isLoggedIn={isLoggedIn} onLogin={handleLogin} onLogout={handleLogout}/>
          <Suspense fallback={<div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1rem' }}>Cargando...</div>}>
             <Routes>
                 <Route path="/" element={<HomePage/>} />
                 <Route path="/search" element={<SearchPage/>} />
-                <Route path="/jobs/:jobId" element={<JobDetail />} />
+                <Route path="/jobs/:jobId" element={<JobDetail isLoggedIn={isLoggedIn} />} />
                 <Route path="*" element={<NoFoundPage/>} />
 
             </Routes>

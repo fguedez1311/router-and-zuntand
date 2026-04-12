@@ -36,7 +36,7 @@ import styles from "./Detail.module.css";
       </div>
     );
   }
-  function DetailPageHeader({ job }) {
+  function DetailPageHeader({ job, children }) {
     return (
       <>
         <header className={styles.header}>
@@ -46,22 +46,22 @@ import styles from "./Detail.module.css";
           </p>
         </header>
 
-        <DetailApplyButton />
+        {children}
        
       </>
     );
   }
-  function DetailApplyButton () {
+  function DetailApplyButton ({isLoggedIn}) {
   
 
   return (
-    <button className={`${styles.applyButton} boton-azul`} >
-      Aplicar Ahora
+    <button disabled={!isLoggedIn} className={`${styles.applyButton} boton-azul`} >
+      {isLoggedIn ? "Aplicar Ahora" :"Inicia sección para aplicar"}
     </button>
   )
 }
 
-export default function JobDetail() {
+export default function JobDetail({isLoggedIn}) {
   const { jobId } = useParams();
   console.log(jobId)
   const navigate = useNavigate();
@@ -112,7 +112,10 @@ export default function JobDetail() {
   return (
     <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 1rem" }}>
       <DetailPageBreadCrumb job={job} />
-      <DetailPageHeader job={job} />
+      <DetailPageHeader job={job} >
+        <DetailApplyButton isLoggedIn={isLoggedIn} />
+
+      </DetailPageHeader>
 
       <JobSection
         title="Descripción del puesto"

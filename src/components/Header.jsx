@@ -1,6 +1,6 @@
 import { NavLink } from "react-router";
 
-export function Header() {
+export function Header({isLoggedIn,onLogin,onLogout}) {
   return (
     <>
       <header className="header">
@@ -29,18 +29,11 @@ export function Header() {
             Empleos
           </NavLink>
         </nav>
-        <div className="header__div">
-          <devjobs-avatar
-            service="x"
-            username="fguedez1311"
-            size="50"
-          ></devjobs-avatar>
-          <devjobs-avatar
-            service="github"
-            username="fguedez1311"
-            size="50"
-          ></devjobs-avatar>
-        </div>
+        {
+          isLoggedIn
+          ? <button className="boton-azul" onClick={onLogout}>Cerrar Sesión</button>
+          : <button className="boton-azul" onClick={onLogin}>Iniciar Sesión</button>
+        }
       </header>
     </>
   );
