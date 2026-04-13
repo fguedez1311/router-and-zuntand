@@ -1,4 +1,5 @@
 import { NavLink } from "react-router";
+import { useAuthStore } from "../store/authStore";
 
 export function Header() {
   return (
@@ -29,19 +30,16 @@ export function Header() {
             Empleos
           </NavLink>
         </nav>
-        <div className="header__div">
-          <devjobs-avatar
-            service="x"
-            username="fguedez1311"
-            size="50"
-          ></devjobs-avatar>
-          <devjobs-avatar
-            service="github"
-            username="fguedez1311"
-            size="50"
-          ></devjobs-avatar>
-        </div>
+        <HeaderUserButton />
       </header>
     </>
   );
+}
+const HeaderUserButton=()=>{
+  const {isLoggedIn,login,logout}=useAuthStore()
+
+  return isLoggedIn
+          
+     ?  <button className="boton-azul" onClick={logout}>Cerrar Sesión</button>
+     :   <button className="boton-azul" onClick={login}>Iniciar Sesión</button>
 }
