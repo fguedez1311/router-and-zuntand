@@ -5,6 +5,7 @@ import { useFavoritesStore } from "../store/favoritesStore";
 
 function JobCardFavoriteButton({jobId}){
    const {toggleFavorite,isFavorite}=useFavoritesStore()
+  
    return(
       <button onClick={()=>toggleFavorite(jobId)}>
               {isFavorite(jobId) ? '❤️': '🩶'}
