@@ -5,6 +5,7 @@ import { useParams, useNavigate } from "react-router";
 import snarkdown from 'snarkdown'
 import styles from "./Detail.module.css";
 import { useAuthStore } from "../store/authStore";
+import { useFavoritesStore } from "../store/favoritesStore";
   function JobSection ({ title, content }) {
   const html = snarkdown(content)
 
@@ -48,6 +49,7 @@ import { useAuthStore } from "../store/authStore";
         </header>
 
         <DetailApplyButton />
+        <DetailFavoriteButton jobId={job.id}/>
        
       </>
     );
@@ -60,6 +62,16 @@ import { useAuthStore } from "../store/authStore";
       {isLoggedIn ? "Aplicar Ahora" :"Inicia sección para aplicar"}
     </button>
   )
+}
+function DetailFavoriteButton({jobId}){
+  const {toggleFavorite,isFavorite}=useFavoritesStore()
+    
+     return(
+        <button onClick={()=>toggleFavorite(jobId)}>
+                {isFavorite(jobId) ? '❤️': '❤'}
+        </button>
+     )
+  
 }
 
 export default function JobDetail() {

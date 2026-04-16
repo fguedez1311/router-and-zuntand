@@ -8,7 +8,7 @@ function JobCardFavoriteButton({jobId}){
   
    return(
       <button onClick={()=>toggleFavorite(jobId)}>
-              {isFavorite(jobId) ? '❤️': '🩶'}
+              {isFavorite(jobId) ? '❤️': '❤'}
       </button>
    )
 }
